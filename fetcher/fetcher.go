@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
@@ -15,13 +16,17 @@ import (
 
 // Fetcher 提取器
 
+var rateLimiter = time.Tick(10000 * time.Millisecond)
+
 // Fetch 提取文本
 func Fetch(url string) ([]byte, error) {
+	<-rateLimiter
 	// resp, err := http.Get(url)
 	resp, err := GetByClient(url)
 	if err != nil {
 		return nil, err
 	}
+
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		return nil,

@@ -5,8 +5,11 @@ import (
 	"log"
 )
 
-// Run ...
-func Run(seeds ...Request) {
+// SimpleEngine 单任务引擎
+type SimpleEngine struct{}
+
+// Run 实现的是单任务爬虫架构
+func (e SimpleEngine) Run(seeds ...Request) {
 	var requests []Request
 	for _, r := range seeds {
 		requests = append(requests, r)
@@ -17,13 +20,11 @@ func Run(seeds ...Request) {
 		requests = requests[1:]
 		log.Printf("Fetching %s", r.URL)
 
-		body, err := fetcher.Fetch(r.URL)
+		parserResult, err := worker(r)
 		if err != nil {
-			log.Printf("Fetcher: error"+
-				"fetching url %s: %v", r.URL, err)
 			continue
 		}
-		parserResult := r.ParserFunc(body)
+
 		requests = append(requests,
 			parserResult.Reuqests...)
 
@@ -31,4 +32,15 @@ func Run(seeds ...Request) {
 			log.Printf("Got item %s", item)
 		}
 	}
+}
+
+func worker(r Request) (ParserResult, error) {
+	body, err := fetcher.Fetch(r.URL)
+	if err != nil {
+		log.Printf("Fetcher: error"+
+			"fetching url %s: %v", r.URL, err)
+		return ParserResult{}, err
+	}
+
+	return r.ParserFunc(body), nil
 }

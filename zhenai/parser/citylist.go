@@ -19,7 +19,7 @@ func ParserCityList(
 	matchs := re.FindAllSubmatch(contents, -1)
 	result := engine.ParserResult{}
 
-	limit := 1
+	limit := 5
 	for _, m := range matchs {
 		result.Items = append(
 			result.Items, "City "+string(m[2]))
