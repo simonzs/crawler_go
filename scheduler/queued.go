@@ -10,6 +10,11 @@ type QueuedScheduler struct {
 	workerChan  chan chan engine.Request
 }
 
+// WorkerChan ...
+func (s *QueuedScheduler) WorkerChan() chan engine.Request {
+	return make(chan engine.Request)
+}
+
 // Submit ...
 func (s *QueuedScheduler) Submit(r engine.Request) {
 	// Send request down to worker chan

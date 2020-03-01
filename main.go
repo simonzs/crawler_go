@@ -2,11 +2,10 @@ package main
 
 import (
 	"crawler_go/engine"
+	"crawler_go/persist"
 	"crawler_go/scheduler"
 	"crawler_go/zhenai/parser"
 )
-
-const baseURL = "https://www.zhenai.com/zhenghun"
 
 func main() {
 	// 单任务爬虫架构爬虫架构
@@ -16,18 +15,22 @@ func main() {
 	// })
 
 	// 并发版爬虫架构 Request
-	// e := engine.ConcurrentEngine{
-	// 	Scheduler:   &scheduler.SimpleScheduler{},
-	// 	WorkerCount: 1,
-	// }
-
-	// 并发版爬虫架构 Request
 	e := engine.ConcurrentEngine{
+		// Scheduler: &scheduler.SimpleScheduler{},
 		Scheduler:   &scheduler.QueuedScheduler{},
-		WorkerCount: 1,
+		WorkerCount: 100,
+		ItemChan:    persist.ItemSaver(),
 	}
+
+	// cityListURL := "https://www.zhenai.com/zhenghun"
+	// e.Run(engine.Request{
+	// 	URL:        cityListURL,
+	// 	ParserFunc: parser.ParserCityList,
+	// })
+
+	cityURL := "http://www.zhenai.com/zhenghun/chengdu"
 	e.Run(engine.Request{
-		URL:        baseURL,
-		ParserFunc: parser.ParserCityList,
+		URL:        cityURL,
+		ParserFunc: parser.ParserCity,
 	})
 }

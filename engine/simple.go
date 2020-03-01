@@ -25,11 +25,14 @@ func (e SimpleEngine) Run(seeds ...Request) {
 			continue
 		}
 
+		itemCount := 1
+
 		requests = append(requests,
 			parserResult.Reuqests...)
 
 		for _, item := range parserResult.Items {
-			log.Printf("Got item %s", item)
+			log.Printf("Got item #%d: %v", itemCount, item)
+			itemCount++
 		}
 	}
 }
