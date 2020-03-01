@@ -16,7 +16,7 @@ import (
 
 // Fetcher 提取器
 
-var rateLimiter = time.Tick(10000 * time.Millisecond)
+var rateLimiter = time.Tick(100 * time.Millisecond)
 
 // Fetch 提取文本
 func Fetch(url string) ([]byte, error) {
