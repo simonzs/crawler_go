@@ -1,0 +1,10 @@
+# GET http://localhost:9200/dating_profile/zhenai/_search HTTP/1.1
+#     ?size=10
+#     &q=硕士 Age:(<28)
+
+GET http://localhost:9200/dating_profile/zhenai/_search HTTP/1.1
+    ?size=10
+    &q=卡老师
+
+# GET http://localhost:9200/dating_profile/zhenai/_search HTTP/1.1
+# 全文搜索

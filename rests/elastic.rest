@@ -1,0 +1,29 @@
+GET http://localhost:9200/study/course/_search HTTP/1.1
+# 全文搜索
+
+# GET http://localhost:9200/study/course/_search HTTP/1.1
+#     ?q=golang
+# Content-Type: application/json
+
+# PUT http://localhost:9200/index/type/id HTTP/1.1
+# index is databse, type is table, id is _id
+
+# PUT http://localhost:9200/study/course/2 HTTP/1.1
+# Content-Type: application/json
+
+# {
+#     "name": "golang",
+#     "instructor": "simon"
+# }
+
+
+# POST http://localhost:9200/study/course HTTP/1.1
+# Content-Type: application/json
+
+# {
+#     "name": "golang_pipeline",
+#     "instructor": "simon"
+# }
+
+# GET http://localhost:9200/study/_mapping HTTP/1.1
+# Content-Type: application/json

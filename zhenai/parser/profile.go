@@ -7,18 +7,20 @@ import (
 	"strconv"
 )
 
-const ageRe = `"age":([0-9]+),`
-const heightRe = `"heightString":"([0-9]*)cm",`
-
-const incomeRe = `"月收入:([^"]*)"`
-const genderRe = `"genderString":"([^"]*)",`
-const marriageRe = `"marriageString":"([^"]*)"`
-const educationRe = `"educationString":"([^"]*)"`
-const occupationRe = `"workProvinceCityString":"([^"]*)"`
+var (
+	ageRe        = regexp.MustCompile(`"age":([0-9]+),`)
+	heightRe     = regexp.MustCompile(`"heightString":"([0-9]*)cm",`)
+	incomeRe     = regexp.MustCompile(`"月收入:([^"]*)"`)
+	genderRe     = regexp.MustCompile(`"genderString":"([^"]*)",`)
+	marriageRe   = regexp.MustCompile(`"marriageString":"([^"]*)"`)
+	educationRe  = regexp.MustCompile(`"educationString":"([^"]*)"`)
+	occupationRe = regexp.MustCompile(`"workProvinceCityString":"([^"]*)"`)
+	idURLRe      = regexp.MustCompile(`https://album.zhenai.com/u/([\d]+)`)
+)
 
 // ParserProfile ...
 func ParserProfile(
-	contents []byte,
+	contents []byte, url string,
 	name string) engine.ParserResult {
 
 	profile := model.Profile{}
@@ -44,13 +46,19 @@ func ParserProfile(
 	profile.Occupation = extractString(contents, occupationRe)
 
 	result := engine.ParserResult{
-		Items: []interface{}{profile},
+		Items: []engine.Item{
+			{
+				URL:     url,
+				Type:    "zhenai",
+				ID:      extractString([]byte(url), idURLRe),
+				Payload: profile,
+			},
+		},
 	}
 	return result
 }
 
-func extractString(contents []byte, reStr string) string {
-	re := regexp.MustCompile(reStr)
+func extractString(contents []byte, re *regexp.Regexp) string {
 	match := re.FindSubmatch(contents)
 	if len(match) >= 2 {
 		return string(match[1])

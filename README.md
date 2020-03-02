@@ -57,6 +57,40 @@ D --5.TEXT-->B
 B --6.TEXT-->E[Parser]
 E --7.requests,items--> B
 ```
+### 11. ElasticSearch
+#### ElasticSearch 是什么
+- 全文搜索引擎
+- 快速地存储、搜索和分析海量数据
+- 用户：维基百科、Stackv Overflow、Github
+#### ElasticSearch 能做什么
+- 存储我们爬取的数据
+- 不需要建表，配置字段等
+- json格式的文档
+- 寻找：男，有房，有车
+- 寻找：女， 年轻漂亮 -> 年轻身材好 -> 年轻身材指标好
+- 原生支持，不需要写代码，不需要拼装查询语句
+#### ElasticSerch 的安装
+- 从网站下载安装包，安装，配置，运行
+- 直接使用Docker
 
+### 12. Docker
+- 容器引擎
+- 打包/发布应用程序，包括系统环境，配置，依赖
+- 虚拟化，沙箱机制
+- 解决了“在我机器上运行的好好地”
+- 使用Go语言编写！
+#### Docker 的安装
+- 下载安装包并且安装 http://get.daocloud.io/ or http://www.docker.com
+#### Docker 的命令
+- docker run -d -p 80:80 nginx
+#### 使用ElasticSearch7 的Docker
+- 使用bing国际搜索： docker pull elasticSearch
+- docker pull docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+- docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.6.0
 
+```
+https://github.com/olivere/elastic
+
+go get -u github.com/olivere/elastic/v7
+```
 
