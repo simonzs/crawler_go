@@ -14,23 +14,29 @@ func main() {
 	// 	ParserFunc: parser.ParserCityList,
 	// })
 
+	itemChan, err := persist.ItemSaver(
+		"dating_profile")
+	if err != nil {
+		panic(err)
+	}
+
 	// 并发版爬虫架构 Request
 	e := engine.ConcurrentEngine{
 		// Scheduler: &scheduler.SimpleScheduler{},
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
-		ItemChan:    persist.ItemSaver(),
+		ItemChan:    itemChan,
 	}
 
-	// cityListURL := "https://www.zhenai.com/zhenghun"
-	// e.Run(engine.Request{
-	// 	URL:        cityListURL,
-	// 	ParserFunc: parser.ParserCityList,
-	// })
-
-	cityURL := "http://www.zhenai.com/zhenghun/chengdu"
+	cityListURL := "https://www.zhenai.com/zhenghun"
 	e.Run(engine.Request{
-		URL:        cityURL,
-		ParserFunc: parser.ParserCity,
+		URL:        cityListURL,
+		ParserFunc: parser.ParserCityList,
 	})
+
+	// cityURL := "http://www.zhenai.com/zhenghun/chengdu"
+	// e.Run(engine.Request{
+	// 	URL:        cityURL,
+	// 	ParserFunc: parser.ParserCity,
+	// })
 }

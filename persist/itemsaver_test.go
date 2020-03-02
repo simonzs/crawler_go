@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/olivere/elastic/v7"
+	"github.com/olivere/elastic"
 )
 
 func TestSave(t *testing.T) {
@@ -27,12 +27,6 @@ func TestSave(t *testing.T) {
 		},
 	}
 
-	// Save excepted item
-	err := save(expected)
-	if err != nil {
-		panic(err)
-	}
-
 	// TODO: Try to start up elastic search
 	// here using docker go client.
 	client, err := elastic.NewClient(
@@ -41,9 +35,16 @@ func TestSave(t *testing.T) {
 		panic(err)
 	}
 
+	const index = "dating_test"
+	// Save excepted item
+	err = save(client, index, expected)
+	if err != nil {
+		panic(err)
+	}
+
 	// Fetch saved item
 	resp, err := client.Get().
-		Index("dating_profile").
+		Index(index).
 		Type(expected.Type).
 		Id(expected.ID).
 		Do(context.Background())
@@ -52,8 +53,13 @@ func TestSave(t *testing.T) {
 		panic(err)
 	}
 
+	t.Logf("%s", resp.Source)
+
 	var actual engine.Item
-	err = json.Unmarshal([]byte(resp.Source), &actual)
+
+	bytes, _ := resp.Source.MarshalJSON()
+	err = json.Unmarshal(bytes, &actual)
+
 	if err != nil {
 		panic(err)
 	}

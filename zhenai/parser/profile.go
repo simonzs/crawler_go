@@ -15,7 +15,7 @@ var (
 	marriageRe   = regexp.MustCompile(`"marriageString":"([^"]*)"`)
 	educationRe  = regexp.MustCompile(`"educationString":"([^"]*)"`)
 	occupationRe = regexp.MustCompile(`"workProvinceCityString":"([^"]*)"`)
-	idURLRe      = regexp.MustCompile(`https://album.zhenai.com/u/([\d]+)`)
+	idURLRe      = regexp.MustCompile(`.*album.zhenai.com/u/([\d]+)`)
 )
 
 // ParserProfile ...
@@ -64,5 +64,14 @@ func extractString(contents []byte, re *regexp.Regexp) string {
 		return string(match[1])
 	} else {
 		return ""
+	}
+}
+
+// ProfileParser ...
+func ProfileParser(
+	name string) engine.ParserFunc {
+	return func(
+		c []byte, url string) engine.ParserResult {
+		return ParserProfile(c, url, name)
 	}
 }
