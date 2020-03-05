@@ -2,8 +2,8 @@ package persist
 
 import (
 	"context"
-	"crawler_go/engine"
 	"errors"
+	"github.com/simonzs/crawler_go/engine"
 	"log"
 
 	"github.com/olivere/elastic"

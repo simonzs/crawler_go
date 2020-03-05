@@ -1,10 +1,10 @@
 package main
 
 import (
-	"crawler_go/engine"
-	"crawler_go/persist"
-	"crawler_go/scheduler"
-	"crawler_go/zhenai/parser"
+	"github.com/simonzs/crawler_go/engine"
+	"github.com/simonzs/crawler_go/persist"
+	"github.com/simonzs/crawler_go/scheduler"
+	"github.com/simonzs/crawler_go/zhenai/parser"
 )
 
 func main() {

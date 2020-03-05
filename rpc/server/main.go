@@ -1,7 +1,7 @@
 package main
 
 import (
-	rpcdemo "crawler_go/rpc"
+	rpcdemo "github.com/simonzs/crawler_go/rpc"
 	"log"
 	"net"
 	"net/rpc"

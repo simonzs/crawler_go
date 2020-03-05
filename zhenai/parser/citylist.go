@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"crawler_go/engine"
+	"github.com/simonzs/crawler_go/engine"
 	"regexp"
 )
 
