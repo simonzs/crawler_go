@@ -24,7 +24,7 @@ func Fetch(url string) ([]byte, error) {
 
 	// resp, err := http.Get(url)
 
-	// log.Printf("Fetching %v", url)
+	log.Printf("Fetching %v", url)
 	resp, err := GetByClient(url)
 	if err != nil {
 		return nil, err

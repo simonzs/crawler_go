@@ -2,10 +2,14 @@ package engine
 
 // ConcurrentEngine 并发引擎
 type ConcurrentEngine struct {
-	Scheduler   Scheduler
-	WorkerCount int
-	ItemChan    chan Item
+	Scheduler        Scheduler
+	WorkerCount      int
+	ItemChan         chan Item
+	ReqeustProcessor Processor
 }
+
+// Processor ...
+type Processor func(Request) (ParserResult, error)
 
 // Scheduler ...
 type Scheduler interface {
@@ -26,14 +30,12 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	e.Scheduler.Run()
 
 	for i := 0; i < e.WorkerCount; i++ {
-		createWorker(e.Scheduler.WorkerChan(),
+		e.createWorker(e.Scheduler.WorkerChan(),
 			out, e.Scheduler)
 	}
 
 	for _, r := range seeds {
 		if isDuplicate(r.URL) {
-			// log.Printf("Duplicate request: "+
-			// 	"%s", r.URL)
 			continue
 		}
 		e.Scheduler.Submit(r)
@@ -42,26 +44,12 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			// if _, ok := item.(model.Profile); ok {
-			// 	log.Printf("Got profile #%d:%v", profileCount, item)
-			// 	profileCount++
-			// }
-
-			// if _, ok := item.(model.Profile); ok {
-			// 	log.Printf("Got profile #%d: %v",
-			// 		itemCount, item)
-			// 	itemCount++
-
-			// 	go func ()  {itemChan <- item}
-			// }
 			go func() { e.ItemChan <- item }()
 		}
 
 		// URL dedup
 		for _, request := range result.Reuqests {
 			if isDuplicate(request.URL) {
-				// log.Printf("Duplicate request: "+
-				// 	"%s", request.URL)
 				continue
 			}
 			e.Scheduler.Submit(request)
@@ -69,15 +57,15 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	}
 }
 
-func createWorker(in chan Request,
+func (e *ConcurrentEngine) createWorker(
+	in chan Request,
 	out chan ParserResult, ready ReadyNotifier) {
 	go func() {
 		for {
 			// tell scheduler i'm ready
 			ready.WorkerReady(in)
 			request := <-in
-			result, err := worker(request)
-
+			result, err := e.ReqeustProcessor(request)
 			if err != nil {
 				continue
 			}

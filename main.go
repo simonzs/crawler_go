@@ -23,15 +23,17 @@ func main() {
 	// 并发版爬虫架构 Request
 	e := engine.ConcurrentEngine{
 		// Scheduler: &scheduler.SimpleScheduler{},
-		Scheduler:   &scheduler.QueuedScheduler{},
-		WorkerCount: 100,
-		ItemChan:    itemChan,
+		Scheduler:        &scheduler.QueuedScheduler{},
+		WorkerCount:      100,
+		ItemChan:         itemChan,
+		ReqeustProcessor: engine.Worker,
 	}
 
 	cityListURL := "https://www.zhenai.com/zhenghun"
 	e.Run(engine.Request{
-		URL:        cityListURL,
-		ParserFunc: parser.ParserCityList,
+		URL: cityListURL,
+		Parser: engine.NewFuncParser(
+			parser.ParserCityList, "ParserCityList"),
 	})
 
 	// cityURL := "http://www.zhenai.com/zhenghun/chengdu"

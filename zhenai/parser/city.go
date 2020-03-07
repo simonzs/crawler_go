@@ -1,8 +1,9 @@
 package parser
 
 import (
-	"github.com/simonzs/crawler_go/engine"
 	"regexp"
+
+	"github.com/simonzs/crawler_go/engine"
 )
 
 var (
@@ -22,9 +23,8 @@ func ParserCity(
 	for _, m := range matches {
 		result.Reuqests = append(
 			result.Reuqests, engine.Request{
-				URL: string(m[1]),
-				ParserFunc: ProfileParser(
-					string(m[2])),
+				URL:    string(m[1]),
+				Parser: NewProfileParser(string(m[2])),
 			})
 	}
 
@@ -32,8 +32,9 @@ func ParserCity(
 	for _, m := range matches {
 		result.Reuqests = append(
 			result.Reuqests, engine.Request{
-				URL:        string(m[1]),
-				ParserFunc: ParserCity,
+				URL: string(m[1]),
+				Parser: engine.NewFuncParser(
+					ParserCity, "ParserCity"),
 			})
 	}
 

@@ -1,12 +1,18 @@
 package main
 
 import (
-	rpcdemo "github.com/simonzs/crawler_go/rpc"
 	"log"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+
+	rpcdemo "github.com/simonzs/crawler_go/rpc"
 )
+
+/*
+telnet locahost 123
+{"method": "DemoService.Div", "params":[{"A":3, "B":4}], "id":1}
+*/
 
 func main() {
 	rpc.Register(rpcdemo.DemoService{})
@@ -24,6 +30,3 @@ func main() {
 		go jsonrpc.ServeConn(conn)
 	}
 }
-
-// telnet locahost 123
-// {"method": "DemoService.Div", "params":[{"A":3, "B":4}], "id":1}

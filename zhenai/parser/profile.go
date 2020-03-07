@@ -1,10 +1,11 @@
 package parser
 
 import (
-	"github.com/simonzs/crawler_go/engine"
-	"github.com/simonzs/crawler_go/model"
 	"regexp"
 	"strconv"
+
+	"github.com/simonzs/crawler_go/engine"
+	"github.com/simonzs/crawler_go/model"
 )
 
 var (
@@ -19,7 +20,7 @@ var (
 )
 
 // ParserProfile ...
-func ParserProfile(
+func parserProfile(
 	contents []byte, url string,
 	name string) engine.ParserResult {
 
@@ -68,10 +69,24 @@ func extractString(contents []byte, re *regexp.Regexp) string {
 }
 
 // ProfileParser ...
-func ProfileParser(
-	name string) engine.ParserFunc {
-	return func(
-		c []byte, url string) engine.ParserResult {
-		return ParserProfile(c, url, name)
+type ProfileParser struct {
+	userName string
+}
+
+// Parse ...
+func (p *ProfileParser) Parse(
+	contents []byte, url string) engine.ParserResult {
+	return parserProfile(contents, url, p.userName)
+}
+
+// Serialize ...
+func (p *ProfileParser) Serialize() (name string, args interface{}) {
+	return "parserProfile", p.userName
+}
+
+// NewProfileParser ...
+func NewProfileParser(name string) *ProfileParser {
+	return &ProfileParser{
+		userName: name,
 	}
 }

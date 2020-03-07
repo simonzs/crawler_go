@@ -1,10 +1,11 @@
 package parser
 
 import (
-	"crawler_go/engine"
-	"crawler_go/model"
 	"io/ioutil"
 	"testing"
+
+	"github.com/simonzs/crawler_go/engine"
+	"github.com/simonzs/crawler_go/model"
 )
 
 func TestParserProfile(t *testing.T) {
@@ -13,7 +14,7 @@ func TestParserProfile(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	result := ParserProfile(bytes,
+	result := parserProfile(bytes,
 		"https://album.zhenai.com/u/1451450381",
 		"只等你")
 
