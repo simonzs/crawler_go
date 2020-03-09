@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/simonzs/crawler_distributed/config"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
@@ -16,7 +17,7 @@ import (
 
 // Fetcher 提取器
 
-var rateLimiter = time.Tick(100 * time.Millisecond)
+var rateLimiter = time.Tick(time.Second / config.Qps)
 
 // Fetch 提取文本
 func Fetch(url string) ([]byte, error) {
@@ -24,7 +25,7 @@ func Fetch(url string) ([]byte, error) {
 
 	// resp, err := http.Get(url)
 
-	log.Printf("Fetching %v", url)
+	log.Printf("Fetching url: %s", url)
 	resp, err := GetByClient(url)
 	if err != nil {
 		return nil, err
